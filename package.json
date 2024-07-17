@@ -1,0 +1,19 @@
+{
+  "name": "chatbot_sys",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AuxProf/chatbot_sys.git"
+  },
+  "author": "Cândido Ribeiro Peralva Neto",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AuxProf/chatbot_sys/issues"
+  },
+  "homepage": "https://github.com/AuxProf/chatbot_sys#readme"
+}
