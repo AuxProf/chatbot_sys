@@ -1,0 +1,183 @@
+body {
+    color: white;
+    margin: 0;
+}
+
+#chatheader {
+    display: flex;
+    padding: 20px;
+    justify-content: space-between;
+    align-items: center;
+    background-color: black;
+}
+
+#base_options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: transparent;
+    padding: 10px;
+}
+
+#chatbot {
+    background-color: black;
+}
+
+#chat {
+    min-width: 500px;
+    min-height: 500px;
+    max-height: 500px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    border-top: solid 1px rgb(31, 31, 35);
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+}
+
+#chat::-webkit-scrollbar {
+    width: 8px;
+}
+
+#chat::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+#chat::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 6px;
+    border: 2px solid transparent;
+}
+
+#input {
+    display: flex;
+    padding: 20px;
+    justify-content: space-between;
+    background-color: black;
+}
+
+#input input {
+    width: 93%;
+    background-color: transparent;
+    outline: none;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    border-bottom: 2px solid rgb(31, 31, 35);
+    border-radius: 0;
+    transition: border-bottom 0.3s ease;
+}
+
+#input input::placeholder {
+    color: rgb(184, 184, 211);
+}
+
+#refresh_btn {
+    background-color: transparent;
+    order: 1;
+    border: none;
+    cursor: pointer;
+}
+
+#other_select {
+    display: flex;
+}
+
+.btt_select_l {
+    background-color: rgb(26, 26, 30);
+    border-radius: 10px 0px 0px 10px;
+    padding: 7px;
+    cursor: pointer;
+}
+
+.btt_select_r {
+    background-color: rgb(26, 26, 30);
+    border-radius: 0px 10px 10px 0px;
+    padding: 7px;
+    cursor: pointer;
+}
+
+.btt_select_s {
+    background-color: rgb(73, 73, 80);
+    cursor: pointer;
+}
+
+#other_buttons {
+    display: flex;
+}
+
+#other_buttons button {
+    background-color: rgb(39, 39, 42);
+    padding: 5px 10px;
+    color: white;
+    border-radius: 10px;
+    border: none;
+    margin-left: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#scroll_down {
+    background-color: transparent;
+    border-top: solid 1px rgb(31, 31, 35);
+    padding: 10px;
+    height: 0;
+    position: relative;
+}
+
+#scroll_down button {
+    background-color: transparent;
+    border: none;
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    margin: 0px 7px 15px 0px;
+    display: none;
+    cursor: pointer;
+}
+
+#input button {
+    background-color: transparent;
+    color: white;
+    padding: 0px 30px 0px 30px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.mensage {
+    margin-top: 15px;
+    border-radius: 10px;
+    max-width: 95%;
+    padding: 20px;
+    word-wrap: break-word;
+}
+
+.my_mensage {
+    background-color: rgb(59, 129, 246);
+    position: relative;
+    float: right;
+    align-self: flex-end;
+}
+
+.bot_mensage {
+    background-color: rgb(63, 63, 70);
+    float: left;
+}
+
+.loading-gif {
+    width: 20px;
+    height: 20px;
+}
+
+#base_info {
+    display: flex;
+    justify-content: space-between;
+}
+
+#base_info h3 {
+    margin: 15px;
+}
