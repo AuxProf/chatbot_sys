@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import write from '../assets/write.svg';
 import './AddChatButton.css'; // Para os estilos do modal
 
-function AddChatButton() {
+function AddChatButton({ onAddChat }) {
     const [showModal, setShowModal] = useState(false);
     const [name, setName] = useState('');
 
@@ -18,12 +18,25 @@ function AddChatButton() {
         setName(e.target.value);
     };
 
+    const generateUniqueId = () => {
+        return Date.now(); // Pode ser substituído por qualquer outro método para garantir unicidade
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Chame sua API aqui com o valor de `name`
-        console.log('Nome enviado:', name);
-        // Feche o modal após o envio
-        setShowModal(false);
+        if (name.trim() !== '') {
+            const newChat = {
+                id: generateUniqueId(),
+                name
+            };
+            if (onAddChat && typeof onAddChat === 'function') {
+                onAddChat(newChat); // Passa o novo chat para o pai
+            } else {
+                console.error('onAddChat is not a function');
+            }
+            setName('');
+            setShowModal(false);
+        }
     };
 
     return (
@@ -37,9 +50,10 @@ function AddChatButton() {
                         <span className="close" onClick={handleCloseModal}>&times;</span>
                         <form onSubmit={handleSubmit}>
                             <label>
+                                Nome:
                                 <input placeholder='Nome' type="text" value={name} onChange={handleInputChange} />
                             </label>
-                            <button type="submit">Enviar</button>
+                            <button type="submit">Criar Novo Chat</button>
                         </form>
                     </div>
                 </div>

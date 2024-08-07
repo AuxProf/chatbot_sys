@@ -1,20 +1,47 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ChatFooter from './ChatFooter';
+import arrow from '../assets/arrow.svg';
 
 function Chat({ messages, sendMessage, changeType }) {
     const chatRef = useRef(null);
+    const [showScrollButton, setShowScrollButton] = useState(false);
 
     useEffect(() => {
-        if (chatRef.current) {
-            chatRef.current.scrollTop = chatRef.current.scrollHeight;
+        const chatElement = chatRef.current;
+        if (chatElement) {
+            chatElement.scrollTop = chatElement.scrollHeight;
         }
     }, [messages]);
 
+    useEffect(() => {
+        const handleScroll = () => {
+            if (chatRef.current) {
+                const { scrollTop, scrollHeight, clientHeight } = chatRef.current;
+                setShowScrollButton(scrollTop + clientHeight < scrollHeight - 200);
+            }
+        };
+
+        const chatElement = chatRef.current;
+        if (chatElement) {
+            chatElement.addEventListener('scroll', handleScroll);
+        }
+
+        return () => {
+            if (chatElement) {
+                chatElement.removeEventListener('scroll', handleScroll);
+            }
+        };
+    }, []);
+
+    const scrollDown = () => {
+        if (chatRef.current) {
+            chatRef.current.scrollTop = chatRef.current.scrollHeight;
+        }
+    };
 
     return (
         <div style={{ width: '100%' }}>
-
-            <div id="chat" ref={chatRef}>
+            <div id="chat" ref={chatRef} style={{ minHeight: '500px', maxHeight: '500px', overflow: 'auto', padding: '20px', borderTop: '1px solid rgb(31, 31, 35)' }}>
                 {messages.map((msg, index) => (
                     <div key={index} className={`mensage ${msg.type === 'user' ? 'my_mensage' : 'bot_mensage'}`}>
                         {msg.type === 'loading' ? (
@@ -29,6 +56,18 @@ function Chat({ messages, sendMessage, changeType }) {
                     </div>
                 ))}
             </div>
+
+            <div id="scroll_down" style={{ position: 'relative', padding: '10px', borderTop: '1px solid rgb(31, 31, 35)' }}>
+                {showScrollButton && (
+                    <button
+                        onClick={scrollDown}
+                        className={showScrollButton ? 'show' : ''}
+                    >
+                        <img src={arrow} alt="Scroll Down" />
+                    </button>
+                )}
+            </div>
+
 
             <ChatFooter sendMessage={sendMessage} changeType={changeType} />
         </div>

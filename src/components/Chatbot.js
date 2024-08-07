@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ChatHeader from './ChatHeader';
 import Chat from './Chat';
-import './styles.css';
 import ChatList from './ChatList';
-// import { sendMessage } from '../api/gptApi';
+import './styles.css';
 
 function Chatbot() {
     const [generateOp, setGenerateOp] = useState('txt');
@@ -17,6 +16,9 @@ function Chatbot() {
     const [messages, setMessages] = useState([
         { type: 'bot', content: 'Olá Professor' },
         { type: 'bot', content: 'Como posso lhe ajudar?' }
+    ]);
+    const [chats, setChats] = useState([
+        { id: 1, name: "Chat 1" }
     ]);
 
     useEffect(() => {
@@ -49,32 +51,11 @@ function Chatbot() {
     };
 
     const placeAnswer = async (input) => {
-        // Simulação de resposta da API (substitua pela lógica real)
         setMessages((prevMessages) => [...prevMessages, { type: 'loading' }]);
 
         if (generateOp === 'txt') {
-            // try {
-            //     // Chamar a função sendMessage
-            //     const response = await sendMessage(null, null, input);
-
-            //     // Atualizar as mensagens com a resposta da API
-            //     setMessages((prevMessages) =>
-            //         prevMessages.map((msg) =>
-            //             msg.type === 'loading' ? { type: 'bot', content: `Resposta do bot: ${response}` } : msg
-            //         )
-            //     );
-            // } catch (error) {
-            //     console.error('Erro ao enviar mensagem:', error);
-            //     setMessages((prevMessages) =>
-            //         prevMessages.map((msg) =>
-            //             msg.type === 'loading' ? { type: 'bot', content: 'Erro ao obter resposta do bot' } : msg
-            //         )
-            //     );
-            // } finally {
-            //     setDisableInput(false);
-            // }
+            // Simulação de resposta da API (substitua pela lógica real)
         } else {
-            // Simular a resposta do bot após 2 segundos
             setTimeout(() => {
                 setMessages((prevMessages) => prevMessages.map((msg) =>
                     msg.type === 'loading' ? { type: 'bot', content: `Resposta ${generateOp} para: ${input}` } : msg
@@ -93,13 +74,15 @@ function Chatbot() {
         setDisableInput(false);
     };
 
-    var chats = [];
+    const handleAddChat = (newChat) => {
+        setChats((prevChats) => [...prevChats, newChat]);
+    };
 
     return (
         <div id="chatbot">
             <ChatHeader refresh={refresh} />
             <div id="chatbody">
-                <ChatList refresh={chats} />
+                <ChatList chats={chats} onAddChat={handleAddChat} />
                 <Chat messages={messages} sendMessage={sendMessage} changeType={changeType} />
             </div>
         </div>

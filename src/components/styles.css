@@ -32,6 +32,7 @@ body {
     min-height: 500px;
     padding: 20px;
     max-height: 500px;
+    overflow-x: hidden;
 }
 
 #chatfooter{
@@ -39,7 +40,6 @@ body {
 }
 
 #chat {
-    width: 100%;
     min-width: 500px;
     min-height: 500px;
     max-height: 500px;
@@ -140,7 +140,7 @@ body {
     background-color: transparent;
     border-top: solid 1px rgb(31, 31, 35);
     padding: 10px;
-    height: 0;
+    height: 0; /* Ajustar se necessário */
     position: relative;
 }
 
@@ -148,12 +148,19 @@ body {
     background-color: transparent;
     border: none;
     position: absolute;
-    bottom: 100%;
-    right: 0;
-    margin: 0px 7px 15px 0px;
-    display: none;
-    cursor: pointer;
+    bottom: 50px; /* Ajustado para que o botão fique visível na parte inferior */
+    right: 10px; /* Ajustado para posicionar o botão corretamente */
+    margin: 0px;
+    display: none; /* Inicialmente escondido, será mostrado via classe CSS */
+    cursor: pointer; 
+    z-index: 1000;
 }
+
+#scroll_down button.show {
+    display: block; /* Exibe o botão quando a classe 'show' é adicionada */
+}
+
+
 
 #input button {
     background-color: transparent;
