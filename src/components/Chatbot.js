@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ChatHeader from './ChatHeader';
 import Chat from './Chat';
-import Input from './Input';
-import OtherButtons from './OtherButtons';
-import OtherSelect from './OtherSelect';
 import './styles.css';
+import ChatList from './ChatList';
+// import { sendMessage } from '../api/gptApi';
 
 function Chatbot() {
     const [generateOp, setGenerateOp] = useState('txt');
@@ -53,13 +52,36 @@ function Chatbot() {
         // Simulação de resposta da API (substitua pela lógica real)
         setMessages((prevMessages) => [...prevMessages, { type: 'loading' }]);
 
-        // Simular a resposta do bot após 2 segundos
-        setTimeout(() => {
-            setMessages((prevMessages) => prevMessages.map((msg) =>
-                msg.type === 'loading' ? { type: 'bot', content: `Resposta ${generateOp} para: ${input}` } : msg
-            ));
-            setDisableInput(false);
-        }, 2000);
+        if (generateOp === 'txt') {
+            // try {
+            //     // Chamar a função sendMessage
+            //     const response = await sendMessage(null, null, input);
+
+            //     // Atualizar as mensagens com a resposta da API
+            //     setMessages((prevMessages) =>
+            //         prevMessages.map((msg) =>
+            //             msg.type === 'loading' ? { type: 'bot', content: `Resposta do bot: ${response}` } : msg
+            //         )
+            //     );
+            // } catch (error) {
+            //     console.error('Erro ao enviar mensagem:', error);
+            //     setMessages((prevMessages) =>
+            //         prevMessages.map((msg) =>
+            //             msg.type === 'loading' ? { type: 'bot', content: 'Erro ao obter resposta do bot' } : msg
+            //         )
+            //     );
+            // } finally {
+            //     setDisableInput(false);
+            // }
+        } else {
+            // Simular a resposta do bot após 2 segundos
+            setTimeout(() => {
+                setMessages((prevMessages) => prevMessages.map((msg) =>
+                    msg.type === 'loading' ? { type: 'bot', content: `Resposta ${generateOp} para: ${input}` } : msg
+                ));
+                setDisableInput(false);
+            }, 2000);
+        }
     };
 
     const refresh = () => {
@@ -68,22 +90,18 @@ function Chatbot() {
             { type: 'bot', content: 'Como posso lhe ajudar?' }
         ]);
         setChatHist([chatHist[0]]);
+        setDisableInput(false);
     };
+
+    var chats = [];
 
     return (
         <div id="chatbot">
             <ChatHeader refresh={refresh} />
-            <Chat messages={messages} />
-            <div id="scroll_down">
-                <button onClick={() => window.scrollTo(0, document.body.scrollHeight)}>
-                    <img src="arrow.svg" alt="Scroll Down" />
-                </button>
+            <div id="chatbody">
+                <ChatList refresh={chats} />
+                <Chat messages={messages} sendMessage={sendMessage} changeType={changeType} />
             </div>
-            <div id="base_options">
-                <OtherButtons sendMessage={sendMessage} />
-                <OtherSelect changeType={changeType} />
-            </div>
-            <Input sendMessage={sendMessage} />
         </div>
     );
 }

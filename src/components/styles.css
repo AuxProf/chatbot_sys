@@ -10,6 +10,7 @@ body {
     justify-content: space-between;
     align-items: center;
     background-color: black;
+    border-bottom: solid 1px rgb(31, 31, 35);
 }
 
 #base_options {
@@ -20,11 +21,25 @@ body {
     padding: 10px;
 }
 
-#chatbot {
+#chatbody {
     background-color: black;
+    display: flex;
+}
+
+#chat_list {
+    background-color: black;
+    border-right: 2px solid rgb(31, 31, 35);
+    min-height: 500px;
+    padding: 20px;
+    max-height: 500px;
+}
+
+#chatfooter{
+    display: flex;
 }
 
 #chat {
+    width: 100%;
     min-width: 500px;
     min-height: 500px;
     max-height: 500px;
@@ -33,7 +48,6 @@ body {
     flex-direction: column;
     align-items: flex-start;
     padding: 20px;
-    border-top: solid 1px rgb(31, 31, 35);
     scrollbar-width: thin;
     scrollbar-color: transparent transparent;
 }
@@ -82,6 +96,7 @@ body {
     border: none;
     cursor: pointer;
 }
+
 
 #other_select {
     display: flex;

@@ -1,10 +1,8 @@
 // src/api/gptApi.js
 import OpenAI from "openai";
-const fs = require("fs");
+// const fs = require("fs");
 
-const GPT_API_URL = 'https://api.openai.com/v1/chat/completions';
-const DALL_E_API_URL = 'https://api.openai.com/v1/images/generations';
-const API_KEY = 'YOUR_API_KEY';
+const API_KEY = 'sk-proj-SAkUwZJieUIuNxYWmFF6T3BlbkFJ8M4S44GNmZMpYfZpPOHs';
 const openai = new OpenAI({
     apiKey: API_KEY,
 });
@@ -54,12 +52,12 @@ const createMessage = async (thread_id, userQuestion) => {
     });
 };
 
-const createFile = async (file_path, assistant_id) => {
-    const file = await openai.files.create({
-        file: fs.createReadStream(file_path),
-        purpose: "assistants",
-    });
-};
+// const createFile = async (file_path, assistant_id) => {
+//     const file = await openai.files.create({
+//         file: fs.createReadStream(file_path),
+//         purpose: "assistants",
+//     });
+// };
 
 const startRun = async (thread_id, assistant_id) => {
     return await openai.beta.threads.runs.create(thread_id, {
