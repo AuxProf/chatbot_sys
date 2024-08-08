@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Modal.css'; // Estilos das modais
+import trash from '../assets/trash.svg';
 
 const DocsModal = ({ onClose }) => {
   const [files, setFiles] = useState([]);
@@ -83,7 +84,7 @@ const DocsModal = ({ onClose }) => {
                       onChange={() => handleSelectFile(file.name)}
                     />
                     {file.name}
-                    <button className="file-delete" onClick={() => handleDeleteFile(file.name)}>Delete</button>
+                    <button className="file-delete" onClick={() => handleDeleteFile(file.name)}><img src={trash}/></button>
                   </div>
                 ))}
               </div>
