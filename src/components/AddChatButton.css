@@ -1,9 +1,6 @@
 
 #addchat {
     background-color: black;
-    border-right: 2px solid rgb(31, 31, 35);
-    border-top: 2px solid rgb(31, 31, 35);
-    min-height: 168px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -21,10 +18,9 @@
     gap: 15px; 
 
     
-    margin-top: 15px;
+    margin: 10px;
     border-radius: 10px;
-    max-width: 95%;
-    padding: 20px;
+    padding: 10px 40px;
     word-wrap: break-word;
     background-color: rgb(26, 26, 30);
 }
@@ -102,8 +98,4 @@ input {
     border-bottom: 2px solid rgb(73, 73, 80);
     border-radius: 0;
     transition: border-bottom 0.3s ease;
-}
-
-button:hover {
-    background-color: #45a049;
 }

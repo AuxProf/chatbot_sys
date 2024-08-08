@@ -49,8 +49,7 @@ function AddChatButton({ onAddChat }) {
                     <div className="modal_create_chat_content">
                         <span className="close" onClick={handleCloseModal}>&times;</span>
                         <form onSubmit={handleSubmit}>
-                            <label>
-                                Nome:
+                            <label>                                
                                 <input placeholder='Nome' type="text" value={name} onChange={handleInputChange} />
                             </label>
                             <button type="submit">Criar Novo Chat</button>

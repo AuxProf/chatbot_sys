@@ -76,14 +76,33 @@ function Chatbot() {
 
     const handleAddChat = (newChat) => {
         setChats((prevChats) => [...prevChats, newChat]);
+        // TODO: Adicionar lógica de criação de chat no backend usando fetch
+    };
+
+    const handleDeleteChat = (chatId) => {
+        setChats((prevChats) => prevChats.filter(chat => chat.id !== chatId));
+        // TODO: Adicionar lógica de deleção de chat no backend usando fetch
+    };
+
+    const addImageToChat = (imageUrl) => {
+        sendMessage(imageUrl); // Enviar imagem como mensagem do usuário
     };
 
     return (
         <div id="chatbot">
             <ChatHeader refresh={refresh} />
             <div id="chatbody">
-                <ChatList chats={chats} onAddChat={handleAddChat} />
-                <Chat messages={messages} sendMessage={sendMessage} changeType={changeType} />
+                <ChatList 
+                    chats={chats} 
+                    onAddChat={handleAddChat} 
+                    onDeleteChat={handleDeleteChat} // Passando a função para o ChatList
+                />
+                <Chat 
+                    messages={messages} 
+                    sendMessage={sendMessage} 
+                    changeType={changeType} 
+                    addImageToChat={addImageToChat} 
+                />
             </div>
         </div>
     );

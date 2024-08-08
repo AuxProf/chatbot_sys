@@ -28,10 +28,9 @@ body {
 
 #chat_list {
     background-color: black;
-    border-right: 2px solid rgb(31, 31, 35);
-    min-height: 500px;
-    padding: 20px;
-    max-height: 500px;
+    min-height: 670px;
+    padding-right: 5px;
+    max-height: 670px;
     overflow-x: hidden;
 }
 
@@ -184,6 +183,11 @@ body {
     position: relative;
     float: right;
     align-self: flex-end;
+}
+
+.my_mensage img {
+    max-width: 350px;
+    max-height: 350px;
 }
 
 .bot_mensage {
