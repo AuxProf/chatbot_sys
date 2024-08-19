@@ -17,9 +17,11 @@ function Chatbot() {
         { type: 'bot', content: 'Olá Professor' },
         { type: 'bot', content: 'Como posso lhe ajudar?' }
     ]);
-    const [chats, setChats] = useState([
-        { id: 1, name: "Chat 1" }
-    ]);
+    const [chats, setChats] = useState([]);
+
+    useEffect(() => {
+        fetchChats();
+    }, []);
 
     useEffect(() => {
         setMessages([
@@ -27,6 +29,28 @@ function Chatbot() {
             { type: 'bot', content: 'Como posso lhe ajudar?' }
         ]);
     }, []);
+
+    const fetchChats = async () => {
+        try {
+            const response = await fetch('http://localhost:8000/gpt/user/2de67e94-88f5-4a53-8a84-b49d9c565e9e', {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjMzMDAyNzU4NjYsImxvZ2luIjoiYSJ9.iSlwVK2mFiGrl8EvjEnRl9o7aXtgNRGW2vPGRm53ceI',
+                    'Content-Type': 'application/json'
+                },
+                mode: 'cors' 
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro ao buscar a lista de chats');
+            }
+
+            const data = await response.json();
+            setChats(data.chats); // Supondo que a resposta seja um array de chats
+        } catch (error) {
+            console.error('Erro ao buscar chats:', error);
+        }
+    };
 
     const changeType = (dir) => {
         setGenerateOp(dir === 'r' ? 'img' : 'txt');
@@ -80,7 +104,7 @@ function Chatbot() {
     };
 
     const handleDeleteChat = (chatId) => {
-        setChats((prevChats) => prevChats.filter(chat => chat.id !== chatId));
+        setChats((prevChats) => prevChats.filter(chat => chat.thread_id !== chatId));
         // TODO: Adicionar lógica de deleção de chat no backend usando fetch
     };
 
@@ -92,16 +116,16 @@ function Chatbot() {
         <div id="chatbot">
             <ChatHeader refresh={refresh} />
             <div id="chatbody">
-                <ChatList 
-                    chats={chats} 
-                    onAddChat={handleAddChat} 
+                <ChatList
+                    chats={chats}
+                    onAddChat={handleAddChat}
                     onDeleteChat={handleDeleteChat} // Passando a função para o ChatList
                 />
-                <Chat 
-                    messages={messages} 
-                    sendMessage={sendMessage} 
-                    changeType={changeType} 
-                    addImageToChat={addImageToChat} 
+                <Chat
+                    messages={messages}
+                    sendMessage={sendMessage}
+                    changeType={changeType}
+                    addImageToChat={addImageToChat}
                 />
             </div>
         </div>

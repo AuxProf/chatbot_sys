@@ -10,12 +10,12 @@ const ChatList = ({ chats = [], onAddChat, onDeleteChat }) => {
 
     useEffect(() => {
         if (chats.length > 0 && activeChatId === null) {
-            setActiveChatId(chats[0].id); // Define o primeiro chat como ativo
+            setActiveChatId(chats[0].thread_id); // Define o primeiro chat como ativo
         }
     }, [chats, activeChatId]);
 
     const handleClick = (chat) => {
-        setActiveChatId(chat.id);
+        setActiveChatId(chat.thread_id);
         console.log(chat);
     };
 
@@ -45,17 +45,17 @@ const ChatList = ({ chats = [], onAddChat, onDeleteChat }) => {
             <div id="chat_list" style={styles.chatList}>
                 {chats.map(chat => (
                     <div
-                        key={chat.id}
+                        key={chat.thread_id}
                         style={{
                             ...styles.chatItem,
-                            backgroundColor: chat.id === activeChatId ? 'rgb(31, 31, 35)' : 'transparent',
-                            fontWeight: chat.id === activeChatId ? 'bold' : 'normal'
+                            backgroundColor: chat.thread_id === activeChatId ? 'rgb(31, 31, 35)' : 'transparent',
+                            fontWeight: chat.thread_id === activeChatId ? 'bold' : 'normal'
                         }}
                         onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(31, 31, 35)'}
-                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = chat.id === activeChatId ? 'rgb(31, 31, 35)' : 'transparent'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = chat.thread_id === activeChatId ? 'rgb(31, 31, 35)' : 'transparent'}
                         onClick={() => handleClick(chat)}
                     >
-                        {chat.name}
+                        {chat.title}
                         <button 
                             style={styles.deleteButton} 
                             onClick={(e) => { 
