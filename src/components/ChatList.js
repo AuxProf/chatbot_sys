@@ -3,7 +3,7 @@ import AddChatButton from './AddChatButton';
 import ConfirmDeleteModal from './ConfirmDeleteModal'; 
 import trash from '../assets/trash.svg';
 
-const ChatList = ({ chats = [], onAddChat, onDeleteChat }) => {
+const ChatList = ({ chats = [], onAddChat, onDeleteChat, onSelectChat }) => {
     const [activeChatId, setActiveChatId] = useState(null);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [chatToDelete, setChatToDelete] = useState(null);
@@ -11,12 +11,13 @@ const ChatList = ({ chats = [], onAddChat, onDeleteChat }) => {
     useEffect(() => {
         if (chats.length > 0 && activeChatId === null) {
             setActiveChatId(chats[0].thread_id); // Define o primeiro chat como ativo
+            onSelectChat(chats[0]); // Carrega as mensagens do primeiro chat
         }
-    }, [chats, activeChatId]);
+    }, [chats, activeChatId, onSelectChat]);
 
     const handleClick = (chat) => {
         setActiveChatId(chat.thread_id);
-        console.log(chat);
+        onSelectChat(chat); // Atualiza as mensagens ao selecionar um chat
     };
 
     const handleDeleteClick = (chat) => {
@@ -26,7 +27,7 @@ const ChatList = ({ chats = [], onAddChat, onDeleteChat }) => {
 
     const handleConfirmDelete = () => {
         if (onDeleteChat && typeof onDeleteChat === 'function') {
-            onDeleteChat(chatToDelete.id); // Chama a função para deletar o chat
+            onDeleteChat(chatToDelete.thread_id); // Chama a função para deletar o chat
         } else {
             console.error('onDeleteChat is not a function');
         }
@@ -38,6 +39,20 @@ const ChatList = ({ chats = [], onAddChat, onDeleteChat }) => {
         setShowConfirmModal(false);
         setChatToDelete(null);
     };
+
+    useEffect(() => {
+        if (!chats.some(chat => chat.thread_id === activeChatId)) {
+            if (chats.length > 0) {
+                // Se o chat ativo foi removido, selecione o primeiro chat da lista
+                const newActiveChat = chats[0];
+                setActiveChatId(newActiveChat.thread_id);
+                onSelectChat(newActiveChat);
+            } else {
+                // Se não há mais chats, desativa o chat ativo
+                setActiveChatId(null);
+            }
+        }
+    }, [chats, activeChatId, onSelectChat]);
 
     return (
         <div style={{ width: '22%', borderRight: '2px solid rgb(31, 31, 35)' }}>
@@ -63,7 +78,7 @@ const ChatList = ({ chats = [], onAddChat, onDeleteChat }) => {
                                 handleDeleteClick(chat); 
                             }}
                         >
-                            <img src={trash} />
+                            <img src={trash} alt="Delete" />
                         </button>
                     </div>
                 ))}
@@ -90,7 +105,7 @@ const styles = {
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
-        padding: '10px 0px 10px 10px',
+        padding: '10px 0px 10px 20px',
         transition: 'background-color 0.3s ease, font-weight 0.3s ease',
         position: 'relative'
     },

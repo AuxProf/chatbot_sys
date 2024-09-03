@@ -6,7 +6,7 @@ import clip from '../assets/clip.svg';
 import docs from '../assets/document_sender.svg';
 import img from '../assets/img_sender.svg';
 
-const FilesButton = ({ addImageToChat }) => {
+const FilesButton = ({ chats, files, setFiles, addImageToChat, threadID }) => {
   const [showButtons, setShowButtons] = useState(false);
   const [showDocsModal, setShowDocsModal] = useState(false);
   const [showImgModal, setShowImgModal] = useState(false);
@@ -43,7 +43,7 @@ const FilesButton = ({ addImageToChat }) => {
           </button>
         </div>
       )}
-      {showDocsModal && <DocsModal onClose={() => setShowDocsModal(false)} />}
+      {showDocsModal && <DocsModal chats={chats} files={files} threadID={threadID} setFiles={setFiles} onClose={() => setShowDocsModal(false)} />}
       {showImgModal && <ImgModal onClose={() => setShowImgModal(false)} addImageToChat={addImageToChat} />}
     </div>
   );

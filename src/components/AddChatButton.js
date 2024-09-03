@@ -4,7 +4,7 @@ import './AddChatButton.css'; // Para os estilos do modal
 
 function AddChatButton({ onAddChat }) {
     const [showModal, setShowModal] = useState(false);
-    const [name, setName] = useState('');
+    const [title, setTitle] = useState('');
 
     const handleButtonClick = () => {
         setShowModal(true);
@@ -15,7 +15,7 @@ function AddChatButton({ onAddChat }) {
     };
 
     const handleInputChange = (e) => {
-        setName(e.target.value);
+        setTitle(e.target.value);
     };
 
     const generateUniqueId = () => {
@@ -24,17 +24,17 @@ function AddChatButton({ onAddChat }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (name.trim() !== '') {
+        if (title.trim() !== '') {
             const newChat = {
-                id: generateUniqueId(),
-                name
+                thread_id: generateUniqueId(),
+                title
             };
             if (onAddChat && typeof onAddChat === 'function') {
                 onAddChat(newChat); // Passa o novo chat para o pai
             } else {
                 console.error('onAddChat is not a function');
             }
-            setName('');
+            setTitle('');
             setShowModal(false);
         }
     };
@@ -50,7 +50,7 @@ function AddChatButton({ onAddChat }) {
                         <span className="close" onClick={handleCloseModal}>&times;</span>
                         <form onSubmit={handleSubmit}>
                             <label>                                
-                                <input placeholder='Nome' type="text" value={name} onChange={handleInputChange} />
+                                <input placeholder="Nome" type="text" value={title} onChange={handleInputChange} />
                             </label>
                             <button type="submit">Criar Novo Chat</button>
                         </form>

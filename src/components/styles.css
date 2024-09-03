@@ -173,8 +173,8 @@ body {
 .mensage {
     margin-top: 15px;
     border-radius: 10px;
-    max-width: 95%;
-    padding: 20px;
+    max-width: 70%;
+    padding: 0px 20px;
     word-wrap: break-word;
 }
 
@@ -188,6 +188,11 @@ body {
 .my_mensage img {
     max-width: 350px;
     max-height: 350px;
+}
+
+.chat-image {
+max-width: 350px;
+max-height: 350px;
 }
 
 .bot_mensage {

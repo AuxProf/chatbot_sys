@@ -25,27 +25,9 @@ const ImgModal = ({ onClose, addImageToChat }) => {
     const formData = new FormData();
     formData.append('file', selectedFile);
 
-    try {
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        if (!data.success) {
-          setError('Erro ao enviar imagem.');
-        }
-      } else {
-        setError('Erro durante o envio da imagem.');
-      }
-    } catch (err) {
-      setError('Erro durante o envio da imagem.');
-    } finally {
       setIsLoading(false);
       setSelectedFile(null);
       onClose();
-    }
   };
 
   return (

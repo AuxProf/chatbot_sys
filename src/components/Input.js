@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import sendImg from '../assets/send.svg';
 import FilesButton from './FilesButton';
 
-function Input({ sendMessage, addImageToChat }) {
+function Input({ chats, sendMessage, setFiles, files, addImageToChat, threadID }) {
   const [inputValue, setInputValue] = useState("");
 
   const handleSend = () => {
@@ -20,7 +20,7 @@ function Input({ sendMessage, addImageToChat }) {
         onChange={(e) => setInputValue(e.target.value)}
         onKeyPress={(e) => e.key === 'Enter' && handleSend()}
       />
-      <FilesButton addImageToChat={addImageToChat} />
+      <FilesButton chats={chats} files={files} setFiles={setFiles} threadID={threadID} addImageToChat={addImageToChat} />
       <button onClick={handleSend}>
         <img src={sendImg} alt="Send" />
       </button>
