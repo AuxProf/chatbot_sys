@@ -93,7 +93,7 @@ function Chatbot({ chats, files, setFiles, setChats }) {
                     mode: 'cors'
                 });
 
-                await waitForResponse();
+                await waitForResponse(0);
             } catch (error) {
                 console.error("Erro na requisição:", error);
             } finally {
@@ -102,10 +102,9 @@ function Chatbot({ chats, files, setFiles, setChats }) {
         }
     };
 
-    const waitForResponse = async () => {
+    const waitForResponse = async (trys) => {
         let responseReceived = false;
         var timer = 0;
-        var trys = 0;
 
         while (!responseReceived) {
             timer++;
@@ -153,7 +152,8 @@ function Chatbot({ chats, files, setFiles, setChats }) {
                 responseReceived = true;
             }
             else if (timer === 10) {
-                await new Promise(resolve => setTimeout(resolve, 1000 * trys));
+                const timeStop = 1000 * trys;
+                await new Promise(resolve => setTimeout(resolve, timeStop));
                 timer = 0;
                 trys++;
             }
