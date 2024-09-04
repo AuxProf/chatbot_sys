@@ -6,7 +6,7 @@ COPY package.json .
 
 RUN npm install
 
-COPY . .
+COPY . /App/.
 
 # Verifique os arquivos copiados
 RUN ls -R /chatbot_sys/src
