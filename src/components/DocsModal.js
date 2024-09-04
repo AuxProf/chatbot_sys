@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Modal.css'; // Estilos das modais
-import trash from '../assets/trash.svg';
+import trashIco from '../assets/trash.svg';
 import Cookies from 'js-cookie';
 
 const DocsModal = ({ chats, files, setFiles, onClose, threadID }) => {
@@ -188,7 +188,7 @@ const DocsModal = ({ chats, files, setFiles, onClose, threadID }) => {
                     />
                     {file.name}
                     <button className="file-delete" onClick={() => handleDeleteFile(file.file_id)}>
-                      <img src={trash} />
+                      <img src={trashIco} alt="Excluir arquivo" />
                     </button>
                   </div>
                 ))}

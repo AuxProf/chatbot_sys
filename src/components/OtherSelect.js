@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import txtImg from '../assets/txt.svg';
-import imgImg from '../assets/img.svg';
+import imgIco from '../assets/img.svg';
 
 function OtherSelect({ changeType }) {
     const [selected, setSelected] = useState('l'); // Estado para controlar o botão selecionado
@@ -17,14 +17,14 @@ function OtherSelect({ changeType }) {
                 className={`btt_select_l ${selected === 'l' ? 'btt_select_s' : ''}`}
                 onClick={() => handleChangeType('l')}
             >
-                <img src={txtImg} alt="Text" />
+                <img src={txtImg} alt="Receber texto" />
             </div>
             <div
                 id="btt_select_r"
                 className={`btt_select_r ${selected === 'r' ? 'btt_select_s' : ''}`}
                 onClick={() => handleChangeType('r')}
             >
-                <img src={imgImg} alt="Image" />
+                <img src={imgIco} alt="Receber imagem" />
             </div>
         </div>
     );
