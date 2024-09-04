@@ -8,6 +8,9 @@ RUN npm install
 
 COPY . .
 
+# Verifique os arquivos copiados
+RUN ls -R /chatbot_sys/src
+
 EXPOSE 8080
 
 CMD ["npm", "start"]
