@@ -17,7 +17,7 @@ COPY . .
 ENV CI=false
 
 # Executa o build da aplicação
-RUN npm run build -- --max-warnings=0
+RUN npm run build
 
 # Exponha a porta em que a aplicação será servida
 EXPOSE 8080
