@@ -13,8 +13,11 @@ RUN npm install
 # Copie o restante dos arquivos da aplicação
 COPY . .
 
-# Opcional: desativa ESLint temporariamente durante o build
-# ENV ESLINT_NO_DEV_ERRORS=true
+# Desabilitar a variável de ambiente CI durante o build
+ENV CI=false
+
+# Executa o build da aplicação
+RUN npm run build -- --max-warnings=0
 
 # Exponha a porta em que a aplicação será servida
 EXPOSE 8080
