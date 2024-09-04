@@ -1,26 +1,23 @@
-# Use a imagem base do Node.js
+# Use the official Node.js image as a parent image
 FROM node:18.20.3
 
-# Defina o diretório de trabalho dentro do container
-WORKDIR /chatbot_sys/src/App
+# Set the working directory in the container
+WORKDIR /app
 
-# Copie apenas os arquivos package.json e package-lock.json
+# Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 
-# Instale as dependências necessárias
+# Install dependencies
 RUN npm install
 
-# Copie o restante dos arquivos da aplicação
+# Copy the rest of the application code to the working directory
 COPY . .
 
-# Desabilitar a variável de ambiente CI durante o build
-ENV CI=false
-
-# Executa o build da aplicação
+# Build the application
 RUN npm run build
 
-# Exponha a porta em que a aplicação será servida
+# Expose port 8080
 EXPOSE 8080
 
-# Comando para iniciar a aplicação
+# Define the command to run the application
 CMD ["npm", "start"]
