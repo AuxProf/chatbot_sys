@@ -1,8 +1,12 @@
-# Use the official Node.js image as a parent image
-FROM node:18.20.3
+# base node image
+FROM node:18-bullseye-slim as base
+
+
+# Install openssl for Prisma
+RUN apt-get update && apt-get install -y openssl
 
 # Set the working directory in the container
-WORKDIR /app
+WORKDIR /chatbot_sys
 
 # Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
