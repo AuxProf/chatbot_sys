@@ -1,15 +1,16 @@
 FROM node:18.20.3
 
-WORKDIR /chatbot_sys
+WORKDIR /chatbot_sys/src/App
 
-COPY package.json .
+# Copy the package.json file into our app directory
+COPY . /chatbot_sys/src/App/
 
+# Install any needed packages specified in package.json
 RUN npm install
 
-COPY . /App/.
+RUN ls /usr/src/app
+RUN ls /usr/src/app/public
 
-# Verifique os arquivos copiados
-RUN ls -R /chatbot_sys/src
 
 EXPOSE 8080
 
