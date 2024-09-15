@@ -7,16 +7,21 @@ function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [chats, setChats] = useState([]); // State para armazenar a lista de chats
     const [files, setFiles] = useState([]);
+    const hasFetchedChats = useRef(false);
 
     useEffect(() => {
         const email = Cookies.get('email');
-        if (email) {
+        if (email && !hasFetchedChats.current) {
             fetchChats(email);
+            testeGpt();
+            hasFetchedChats.current = true; 
         }
     }, []);
 
     const handleLogin = async (email) => {
         const success = await fetchChats(email);
+        hasFetchedChats.current = true; 
+        testeGpt();
         return success;
     };
 
@@ -61,6 +66,23 @@ function App() {
             console.error('Erro ao buscar chats:', error);
             setIsLoggedIn(false);
             return false;
+        }
+    };
+
+    const testeGpt = async () => {
+        try {
+            const response = await fetch(`https://api.openai.com/v1/files`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${process.env.REACT_APP_GPT_URL}`,
+                    'Content-Type': 'application/json'
+                },
+                mode: 'cors'
+            });
+            const data = await response.json();
+            console.log(data);
+        } catch (error) {
+            console.error('Erro ao buscar chats:', error);
         }
     };
 
