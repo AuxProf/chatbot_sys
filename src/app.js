@@ -13,15 +13,13 @@ function App() {
         const email = Cookies.get('email');
         if (email && !hasFetchedChats.current) {
             fetchChats(email);
-            testeGpt();
             hasFetchedChats.current = true; 
         }
     }, []);
 
     const handleLogin = async (email) => {
         const success = await fetchChats(email);
-        hasFetchedChats.current = true; 
-        testeGpt();
+        hasFetchedChats.current = true;
         return success;
     };
 
@@ -66,23 +64,6 @@ function App() {
             console.error('Erro ao buscar chats:', error);
             setIsLoggedIn(false);
             return false;
-        }
-    };
-
-    const testeGpt = async () => {
-        try {
-            const response = await fetch(`${process.env.REACT_APP_GPT_URL}files`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${process.env.REACT_APP_GPT_TOKEN}`,
-                    'Content-Type': 'application/json'
-                },
-                mode: 'cors'
-            });
-            const data = await response.json();
-            console.log(data);
-        } catch (error) {
-            console.error('Erro ao buscar chats:', error);
         }
     };
 
