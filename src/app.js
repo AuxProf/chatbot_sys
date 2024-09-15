@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Chatbot from './components/Chatbot';
 import Login from './components/Login/Login';
 import Cookies from 'js-cookie';
