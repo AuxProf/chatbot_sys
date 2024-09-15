@@ -44,7 +44,7 @@ const FilesButton = ({ chats, files, setFiles, addImageToChat, threadID }) => {
         </div>
       )}
       {showDocsModal && <DocsModal chats={chats} files={files} threadID={threadID} setFiles={setFiles} onClose={() => setShowDocsModal(false)} />}
-      {showImgModal && <ImgModal onClose={() => setShowImgModal(false)} addImageToChat={addImageToChat} />}
+      {/* {showImgModal && <ImgModal onClose={() => setShowImgModal(false)} addImageToChat={addImageToChat} />} */}
     </div>
   );
 };
