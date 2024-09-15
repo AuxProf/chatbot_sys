@@ -71,10 +71,10 @@ function App() {
 
     const testeGpt = async () => {
         try {
-            const response = await fetch(`https://api.openai.com/v1/files`, {
+            const response = await fetch(`${process.env.REACT_APP_GPT_URL}files`, {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer ${process.env.REACT_APP_GPT_URL}`,
+                    'Authorization': `Bearer ${process.env.REACT_APP_GPT_TOKEN}`,
                     'Content-Type': 'application/json'
                 },
                 mode: 'cors'
