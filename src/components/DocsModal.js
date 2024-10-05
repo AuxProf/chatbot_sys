@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Modal.css'; // Estilos das modais
 import trashIco from '../assets/trash.svg';
 import Cookies from 'js-cookie';
+import { getDocument } from 'pdfjs-dist';
 
 const DocsModal = ({ chats, files, setFiles, onClose, threadID }) => {
   const [selectedFiles, setSelectedFiles] = useState(new Set());
@@ -30,29 +31,39 @@ const DocsModal = ({ chats, files, setFiles, onClose, threadID }) => {
   const handleAddFile = async () => {
     if (uploadFile) {
       try {
-        // Ler o arquivo como texto para manipulação
-        const fileText = await uploadFile.text();
+        const extractTextFromPdf = async (file) => {
+          const pdf = await getDocument(file).promise;
+          let text = '';
 
-        // Aqui você pode definir como o arquivo será transformado em JSONL
+          for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const content = await page.getTextContent();
+            const pageText = content.items.map(item => item.str).join(' ');
+            text += pageText + '\n';
+          }
+          return text;
+        };
+
+        // Extrair o texto do PDF
+        const fileText = await extractTextFromPdf(uploadFile);
+
+        // Converter o texto extraído para JSONL
         const jsonlData = fileText
-          .split('\n')  // Supondo que cada linha do arquivo seja um item a ser transformado
+          .split('\n')
+          .filter(line => line.trim() !== '')  // Ignorar linhas vazias
           .map(line => {
-            // Modificar de acordo com a estrutura esperada para seu modelo
             return JSON.stringify({
-              prompt: `Translate the following: ${line}`, // Exemplo de prompt
-              completion: `The translation of ${line}`    // Exemplo de completion
+              prompt: `Conteúdo do PDF: ${line}`,
+              completion: `Processado a partir da linha: ${line}`
             });
           })
-          .join('\n');  // Converter para JSONL, separando as linhas
+          .join('\n');
 
         // Criar o FormData e anexar o arquivo JSONL gerado
         const formData = new FormData();
         const blob = new Blob([jsonlData], { type: 'application/jsonl' });  // Criar um Blob a partir do JSONL
         formData.append("file", blob, `${uploadFile.name}.jsonl`);  // Nomear o arquivo como .jsonl
         formData.append("purpose", "fine-tune");
-        // const formData = new FormData();
-        // formData.append("file", uploadFile);
-        // formData.append("purpose", "fine-tune");
 
         const gpt = await fetch(`${process.env.REACT_APP_HISTORIC_SYS_URL}key`, {
           method: "GET",
