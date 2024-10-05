@@ -30,16 +30,29 @@ const DocsModal = ({ chats, files, setFiles, onClose, threadID }) => {
   const handleAddFile = async () => {
     if (uploadFile) {
       try {
-        const jsonContent = await uploadFile.text();
-        const jsonArray = JSON.parse(jsonContent);
-        const jsonlContent = jsonArray.map(item => JSON.stringify(item)).join('\n');
-  
-        // Crie um novo Blob no formato JSONL
-        const jsonlFile = new Blob([jsonlContent], { type: "application/jsonl" });
+        // Ler o arquivo como texto para manipulação
+        const fileText = await uploadFile.text();
+
+        // Aqui você pode definir como o arquivo será transformado em JSONL
+        const jsonlData = fileText
+          .split('\n')  // Supondo que cada linha do arquivo seja um item a ser transformado
+          .map(line => {
+            // Modificar de acordo com a estrutura esperada para seu modelo
+            return JSON.stringify({
+              prompt: `Translate the following: ${line}`, // Exemplo de prompt
+              completion: `The translation of ${line}`    // Exemplo de completion
+            });
+          })
+          .join('\n');  // Converter para JSONL, separando as linhas
+
+        // Criar o FormData e anexar o arquivo JSONL gerado
         const formData = new FormData();
-        formData.append("file", jsonlFile, `${uploadFile.name}.jsonl`);
+        const blob = new Blob([jsonlData], { type: 'application/jsonl' });  // Criar um Blob a partir do JSONL
+        formData.append("file", blob, `${uploadFile.name}.jsonl`);  // Nomear o arquivo como .jsonl
         formData.append("purpose", "fine-tune");
-  
+        // const formData = new FormData();
+        // formData.append("file", uploadFile);
+        // formData.append("purpose", "fine-tune");
 
         const gpt = await fetch(`${process.env.REACT_APP_HISTORIC_SYS_URL}key`, {
           method: "GET",
