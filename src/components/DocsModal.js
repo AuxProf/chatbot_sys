@@ -30,9 +30,16 @@ const DocsModal = ({ chats, files, setFiles, onClose, threadID }) => {
   const handleAddFile = async () => {
     if (uploadFile) {
       try {
+        const jsonContent = await uploadFile.text();
+        const jsonArray = JSON.parse(jsonContent);
+        const jsonlContent = jsonArray.map(item => JSON.stringify(item)).join('\n');
+  
+        // Crie um novo Blob no formato JSONL
+        const jsonlFile = new Blob([jsonlContent], { type: "application/jsonl" });
         const formData = new FormData();
-        formData.append("file", new Blob([jsonlContent], { type: "application/jsonl" }), `${uploadFile.name}.jsonl`);
+        formData.append("file", jsonlFile, `${uploadFile.name}.jsonl`);
         formData.append("purpose", "fine-tune");
+  
 
         const gpt = await fetch(`${process.env.REACT_APP_HISTORIC_SYS_URL}key`, {
           method: "GET",
