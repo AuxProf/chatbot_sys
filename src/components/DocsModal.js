@@ -31,7 +31,7 @@ const DocsModal = ({ chats, files, setFiles, onClose, threadID }) => {
     if (uploadFile) {
       try {
         const formData = new FormData();
-        formData.append("file", uploadFile);
+        formData.append("file", new Blob([jsonlContent], { type: "application/jsonl" }), `${uploadFile.name}.jsonl`);
         formData.append("purpose", "fine-tune");
 
         const gpt = await fetch(`${process.env.REACT_APP_HISTORIC_SYS_URL}key`, {
