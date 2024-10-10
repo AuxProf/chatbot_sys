@@ -28,33 +28,27 @@ const DocsModal = ({ chats, files, setFiles, onClose, threadID }) => {
   };
 
   const handleAddFile = async () => {
-    if (uploadFile) {
-      try {        
-        const formData = new FormData();
-        const user_id = Cookies.get('user_email_id');
-        formData.append("file", uploadFile);
-
-        const response = await fetch(`${process.env.REACT_APP_HISTORIC_SYS_URL}file/${user_id}`, {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${process.env.REACT_APP_API_TOKEN}`
-          },
-          body: formData,  // Envia o FormData que contém o arquivo
-        });
-
-        if (response.ok) {
-          const result = await response.json();
-          alert("Conteúdo enviado");
-          setFiles((prevFiles) => [...prevFiles, { name: result.name, file: uploadFile, file_id: result.file_id }]);
-          setUploadFile(null);
-          setActiveForm('list');
-        } else {
-          console.error("Erro ao enviar o arquivo:", response.statusText);
-        }
-      } catch (error) {
-        console.error("Error uploading file:", error);
-      }
+    if (!uploadFile) { alert("Selecione um conteudo para o envio"); return;}
+    if (uploadFile.size > 524287790) { alert("O arquivo não pode ser maior que 500mb"); return;}
+    try {        
+      const formData = new FormData();
+      const user_id = Cookies.get('user_email_id');
+      formData.append("file", uploadFile);
+      const response = await fetch(`${process.env.REACT_APP_HISTORIC_SYS_URL}file/${user_id}`, {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${process.env.REACT_APP_API_TOKEN}` },
+        body: formData,
+      });
+      if (!response.ok) { alert("Erro ao enviar arquivo"); return; }
+      const result = await response.json();
+      alert("Conteúdo enviado");
+      setFiles((prevFiles) => [...prevFiles, { name: result.name, file: uploadFile, file_id: result.file_id }]);
+      setUploadFile(null);
+      setActiveForm('list');
+    } catch (error) {
+      console.error("Error uploading file:", error);
     }
+    
   };
 
   const handleSelectFile = (fileId) => {
@@ -167,7 +161,7 @@ const DocsModal = ({ chats, files, setFiles, onClose, threadID }) => {
           {activeForm === 'upload' && (
             <div className="upload-form">
               <h3>Enviar novo arquivo</h3>
-              <input type="file" onChange={handleFileChange} />
+              <input type="file" onChange={handleFileChange} accept=".txt, .docx, .xlsx, .pdf, .pptx" />
               <button className="form-buttom" onClick={handleAddFile}>Enviar Arquivo</button>
             </div>
           )}
