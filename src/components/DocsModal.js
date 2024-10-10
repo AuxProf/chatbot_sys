@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import './Modal.css'; // Estilos das modais
+import './Modal.css';
 import trashIco from '../assets/trash.svg';
 import Cookies from 'js-cookie';
-import { getDocument } from 'pdfjs-dist';
 
 const DocsModal = ({ chats, files, setFiles, onClose, threadID }) => {
   const [selectedFiles, setSelectedFiles] = useState(new Set());
@@ -30,91 +29,28 @@ const DocsModal = ({ chats, files, setFiles, onClose, threadID }) => {
 
   const handleAddFile = async () => {
     if (uploadFile) {
-      try {
-        const extractTextFromPdf = async (file) => {
-          const pdf = await getDocument(file).promise;
-          let text = '';
-
-          for (let i = 1; i <= pdf.numPages; i++) {
-            const page = await pdf.getPage(i);
-            const content = await page.getTextContent();
-            const pageText = content.items.map(item => item.str).join(' ');
-            text += pageText + '\n';
-          }
-          return text;
-        };
-
-        // Extrair o texto do PDF
-        const fileText = await extractTextFromPdf(uploadFile);
-
-        // Converter o texto extraído para JSONL
-        const jsonlData = fileText
-          .split('\n')
-          .filter(line => line.trim() !== '')  // Ignorar linhas vazias
-          .map(line => {
-            return JSON.stringify({
-              prompt: `Conteúdo do PDF: ${line}`,
-              completion: `Processado a partir da linha: ${line}`
-            });
-          })
-          .join('\n');
-
-        // Criar o FormData e anexar o arquivo JSONL gerado
+      try {        
         const formData = new FormData();
-        const blob = new Blob([jsonlData], { type: 'application/jsonl' });  // Criar um Blob a partir do JSONL
-        formData.append("file", blob, `${uploadFile.name}.jsonl`);  // Nomear o arquivo como .jsonl
-        formData.append("purpose", "fine-tune");
-
-        const gpt = await fetch(`${process.env.REACT_APP_HISTORIC_SYS_URL}key`, {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${process.env.REACT_APP_API_TOKEN}`,
-          }
-        });
-
-        if (!gpt.ok) {
-          throw new Error(`Failed to upload file: ${gpt.statusText}`);
-        }
-
-        const gpt_data = await gpt.json();
-
-        const file_insert = await fetch("https://api.openai.com/v1/files", {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${gpt_data.key}`,
-          },
-          body: formData,
-        });
-
-        if (!file_insert.ok) {
-          throw new Error(`Failed to upload file: ${file_insert.statusText}`);
-        }
-
-        const file = await file_insert.json();
-
         const user_id = Cookies.get('user_email_id');
+        formData.append("file", uploadFile);
 
-        const response = await fetch(`${process.env.REACT_APP_HISTORIC_SYS_URL}file`, {
+        const response = await fetch(`${process.env.REACT_APP_HISTORIC_SYS_URL}file/${user_id}`, {
           method: "POST",
           headers: {
-            "Authorization": `Bearer ${process.env.REACT_APP_API_TOKEN}`,
-            "Content-Type": "application/json"
+            "Authorization": `Bearer ${process.env.REACT_APP_API_TOKEN}`
           },
-          body: JSON.stringify({
-            name: uploadFile.name,
-            user_id: user_id,
-            file_id: file.id,
-          }),
+          body: formData,  // Envia o FormData que contém o arquivo
         });
 
-        if (!response.ok) {
-          throw new Error(`Failed to upload file: ${response.statusText}`);
+        if (response.ok) {
+          const result = await response.json();
+          alert("Conteúdo enviado");
+          setFiles((prevFiles) => [...prevFiles, { name: result.name, file: uploadFile, file_id: result.file_id }]);
+          setUploadFile(null);
+          setActiveForm('list');
+        } else {
+          console.error("Erro ao enviar o arquivo:", response.statusText);
         }
-
-        setFiles((prevFiles) => [...prevFiles, { name: uploadFile.name, file: uploadFile, file_id: file.id }]);
-        setUploadFile(null);
-        setActiveForm('list');
-
       } catch (error) {
         console.error("Error uploading file:", error);
       }

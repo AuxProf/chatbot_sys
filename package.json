@@ -9,9 +9,11 @@
     "fs": "^0.0.1-security",
     "js-cookie": "^3.0.5",
     "katex": "^0.16.11",
+    "mammoth": "^1.8.0",
     "marked": "^14.0.0",
     "mathjax": "^3.2.2",
     "openai": "^4.0.0",
+    "papaparse": "^5.4.1",
     "pdf-parse": "^1.1.1",
     "pdfjs-dist": "^4.6.82",
     "react": "^18.3.1",
@@ -25,7 +27,8 @@
     "remark-gfm": "^4.0.0",
     "remark-math": "^6.0.0",
     "showdown": "^2.1.0",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "react-scripts start",
