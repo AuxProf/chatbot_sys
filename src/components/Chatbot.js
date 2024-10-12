@@ -21,27 +21,17 @@ function Chatbot({ chats, files, setFiles, setChats }) {
 
     const sendMessage = async (text) => {
         if (!disableInput && text.trim() !== "") {
-
             setDisableInput(true);
-
             try {
-
-                // Adicionar a mensagem de carregamento antes de iniciar o fetch
                 setMessages((prevMessages) => [
                     ...prevMessages,
-                    { type: 'user', content: text }, // Adiciona a mensagem do usuário
-                    { type: 'loading' } // Adiciona a mensagem de carregamento
+                    { type: 'user', content: text },
+                    { type: 'loading' }
                 ]);
                 const response = await fetch(`${process.env.REACT_APP_HISTORIC_SYS_URL}message/${generateOp}`, {
                     method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${process.env.REACT_APP_API_TOKEN}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        thread_id: currentThreadId,
-                        text: text
-                    }),
+                    headers: {'Authorization': `Bearer ${process.env.REACT_APP_API_TOKEN}`, 'Content-Type': 'application/json'},
+                    body: JSON.stringify({thread_id: currentThreadId, text: text}),
                     mode: 'cors'
                 });
 
@@ -54,11 +44,7 @@ function Chatbot({ chats, files, setFiles, setChats }) {
                     await waitForResponse();
                 } else {
                     const data = await response.json();
-                    setMessages((prevMessages) =>
-                        prevMessages.map((msg) =>
-                            msg.type === 'loading' ? { type: 'bot', content: data.text, isUrl: true } : msg
-                        )
-                    );
+                    setMessages((prevMessages) => prevMessages.map((msg) => msg.type === 'loading' ? { type: 'bot', content: data.text, isUrl: true } : msg ) );
                 }
             } catch (error) {
                 console.error("Erro na requisição:", error);
@@ -102,65 +88,58 @@ function Chatbot({ chats, files, setFiles, setChats }) {
         }
     };
 
-    const waitForResponse = async (trys) => {
+    const waitForResponse = async () => {
         let responseReceived = false;
-        var timer = 0;
+        var trys = 0;
+        var lastId = null;
 
         while (!responseReceived) {
-            timer++;
             const response = await fetch(`${process.env.REACT_APP_HISTORIC_SYS_URL}chat/last/${currentThreadId}`, {
                 method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${process.env.REACT_APP_API_TOKEN}`,
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Authorization': `Bearer ${process.env.REACT_APP_API_TOKEN}`, 'Content-Type': 'application/json' },
                 mode: 'cors'
             });
-
             const data = await response.json();
-
-            if (data.length === 0) {
-                // Se não houver mensagem, continue aguardando
-                continue;
-            }
+            if (data.length === 0) { continue; }
 
             const latestMessage = data[0];
 
-            if (latestMessage.role !== 'user' && latestMessage.text !== '') {
-                // Substituir a mensagem de carregamento pela mensagem recebida
-                setMessages((prevMessages) =>
-                    prevMessages.map((msg) =>
-                        msg.type === 'loading' ? {
-                            type: 'bot',
-                            content: latestMessage.text,
-                            isUrl: false
-                        } : msg
-                    )
-                );
+            if (latestMessage.role !== 'user' && latestMessage.text !== '' && lastId !== latestMessage.id) {
+                responseReceived = (placeMessage(latestMessage.text) && latestMessage.status === "Completed");
+                lastId = latestMessage.id;
+                trys = 0;
+                if(latestMessage.status === 'Loading'){ placeAwaitMessage(); }
+            }
+            else if (trys > 50 || (latestMessage.role === 'user' && latestMessage.status === "Fail")) { responseReceived = placeMessage('Erro ao enviar mensagem'); }
+            else if (latestMessage.status === "Completed") { 
                 responseReceived = true;
+                setMessages((prevMessages) => { return prevMessages.slice(0, -1); }); 
             }
-            else if (trys > 3) {
-                setMessages((prevMessages) =>
-                    prevMessages.map((msg) =>
-                        msg.type === 'loading' ? {
-                            type: 'bot',
-                            content: 'Erro ao enviar mensagem',
-                            isUrl: false
-                        } : msg
-                    )
-                );
-                responseReceived = true;
-            }
-            else if (timer === 10) {
-                const timeStop = 1000 * trys;
-                await new Promise(resolve => setTimeout(resolve, timeStop));
-                timer = 0;
-                trys++;
-            }
+            trys++;
         }
 
         setDisableInput(false);
     };
+
+    function placeMessage(message) {
+        setMessages((prevMessages) =>
+            prevMessages.map((msg) =>
+                msg.type === 'loading' ? {
+                    type: 'bot',
+                    content: message,
+                    isUrl: false
+                } : msg
+            )
+        );
+        return true;
+    }
+
+    function placeAwaitMessage() {
+        setMessages((prevMessages) => [
+            ...prevMessages,
+            { type: 'loading' }
+        ]);
+    }
 
     const refresh = async () => {
         setMessages([
