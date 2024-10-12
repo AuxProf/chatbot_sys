@@ -111,7 +111,7 @@ function Chatbot({ chats, files, setFiles, setChats }) {
                 if(latestMessage.status === 'Loading'){ placeAwaitMessage(); }
             }
             else if (trys > 50 || (latestMessage.role === 'user' && latestMessage.status === "Fail")) { responseReceived = placeMessage('Erro ao enviar mensagem'); }
-            else if (latestMessage.status === "Completed") { 
+            else if (latestMessage.role !== 'user' && latestMessage.text !== '' && latestMessage.status === "Completed") { 
                 responseReceived = true;
                 setMessages((prevMessages) => { return prevMessages.slice(0, -1); }); 
             }
