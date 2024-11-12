@@ -54,28 +54,25 @@ function Chatbot({ chats, files, setFiles, setChats }) {
         }
     };
 
-    const sendImage = async (url) => {
+    const sendImage = async (file) => {
         if (!disableInput) {
-
             setDisableInput(true);
-
             try {
-
+                const formData = new FormData();
+                const url = URL.createObjectURL(file);
+                formData.append("file", file);
                 setMessages((prevMessages) => [
                     ...prevMessages,
                     { type: 'user', content: url, isUrl: true },
                     { type: 'loading' }
                 ]);
-                await fetch(`${process.env.REACT_APP_HISTORIC_SYS_URL}message/img/send`, {
+                await fetch(`${process.env.REACT_APP_HISTORIC_SYS_URL}message/img/${currentThreadId}`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${process.env.REACT_APP_API_TOKEN}`,
-                        'Content-Type': 'application/json'
+                        // 'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        thread_id: currentThreadId,
-                        url: url
-                    }),
+                    body: formData,
                     mode: 'cors'
                 });
 
