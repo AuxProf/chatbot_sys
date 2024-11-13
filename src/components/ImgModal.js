@@ -34,15 +34,15 @@ const ImgModal = ({ onClose, addImageToChat }) => {
     <div className="modal">
       <div className="modal_content">
         <span className="close" onClick={onClose}>&times;</span>
-        {/* <h3>Envio de imagem em breve</h3> */}
-        <form className="file-list-form" onSubmit={handleSubmit}>
+        <h3>Envio de imagem em breve</h3>
+        {/* <form className="file-list-form" onSubmit={handleSubmit}>
           <h3>Envie uma imagem no chat</h3>
           <input type="file" onChange={handleFileChange} accept="image/*" />
           <button className="form-buttom"  type="submit" disabled={isLoading}>
             {isLoading ? 'Enviando...' : 'Enviar Imagem'}
           </button>
           {error && <p className="error">{error}</p>}
-        </form>
+        </form> */}
       </div>
     </div>
   );
